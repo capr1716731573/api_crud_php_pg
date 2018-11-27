@@ -17,6 +17,13 @@ $app->group('/hospitales/usuarios/', function () {
                    ->write($um->getByID($args["id"]));
     });
 
+    $this->post('getByUserPass', function ($req, $res) {
+        $um = new usuario();
+        $data = json_encode($req->getParsedBody());
+        return $res->withHeader("Content-Type", "application/json")
+            ->write($um->getByUserPass($data));
+    });
+
     $this->post('insert', function ($req, $res) {
         $um = new usuario();
         $data = json_encode($req->getParsedBody());

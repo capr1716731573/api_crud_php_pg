@@ -31,6 +31,7 @@ class usuario
                 u.apellidos_user,
                 u.fecnac_user,
                 p.nombre_provincia,
+                u.fk_provincia,
                 u.ciudad_user,
                 u.usuario_user,
                 u.contrasena_user
@@ -73,6 +74,7 @@ class usuario
                     u.apellidos_user,
                     u.fecnac_user,
                     p.nombre_provincia,
+                    u.fk_provincia,
                     u.ciudad_user,
                     u.usuario_user,
                     u.contrasena_user
@@ -83,6 +85,42 @@ class usuario
             // Preparar sentencia
             $comando = $this->db->prepare($query);
             $comando->bindValue(1, $id);
+            // Ejecutar sentencia preparada
+            $comando->execute();
+            $result=$comando->fetch(PDO::FETCH_ASSOC);
+    
+            if($result){
+           
+                return json_encode(Manejo_Respuesta_WS::retorno_datos('ok',200,$result));
+            }else{
+                if(sizeof($result)==0){
+                    return json_encode(Manejo_Respuesta_WS::respuestas('error',400,'No existen datos / '.self::TABLA.' !!!'));
+                }else{
+                    return json_encode(Manejo_Respuesta_WS::respuestas('error',400,'Error al obtener datos '.self::TABLA));
+                }
+            }
+    
+        
+        } catch (ErrorException $ee) {
+            return json_encode(Manejo_Respuesta_WS::respuestas('error',400,'Error en el Web Service con SLIM FRAMEWORK - '.self::TABLA));
+        } catch( PDOException $e){
+            return json_encode(Manejo_Respuesta_WS::respuestas('error',400,'Error con el motor de base de datos postgresSQL - '.self::TABLA));
+        }
+    }
+
+    public function getByUserPass($data){
+        $data=json_decode($data, true);
+        
+            $query="SELECT
+            pk_user, cedula_user, nombres_user, apellidos_user, fecnac_user, fk_provincia, ciudad_user,
+                           usuario_user
+            from usuarios
+            where usuario_user=? and contrasena_user=?";
+        try {
+            // Preparar sentencia
+            $comando = $this->db->prepare($query);
+            $comando->bindValue(1, $data['usuario']);
+            $comando->bindValue(2, $data['password']);
             // Ejecutar sentencia preparada
             $comando->execute();
             $result=$comando->fetch(PDO::FETCH_ASSOC);
