@@ -191,8 +191,8 @@ class hospital
     
     }//json_build_object
 
-    public function updateImage($data){
-        $data=json_decode($data, true);
+    public function updateImage($name,$id){
+       
         $query="UPDATE hospital SET  
                        foto_hospital=?
             WHERE pk_hospital=? RETURNING json_build_object (
@@ -206,8 +206,8 @@ class hospital
         try {
             $sentencia = $this->db->prepare($query);
             $this->db->beginTransaction();
-            $sentencia->bindValue(1, $data['foto_hospital']);
-            $sentencia->bindValue(2, $data['pk_hospital']);
+            $sentencia->bindValue(1, $name);
+            $sentencia->bindValue(2, $id);
             
             $sentencia->execute();
             $rows = $sentencia->fetch(PDO::FETCH_ASSOC);

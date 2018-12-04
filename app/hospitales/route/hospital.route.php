@@ -32,7 +32,7 @@ $app->group('/hospitales/hospital/', function () {
     });
 
     $this->get('delete/{id}', function ($req, $res, $args) {
-        $um = new usuario();
+        $um = new hospital();
         return $res->withHeader("Content-Type", "application/json")
             ->write($um->delete($args["id"]));
     });

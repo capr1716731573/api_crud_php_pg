@@ -13,8 +13,9 @@ class PiramideUploader {
 	public function upload($name, $file, $directory, $types_allowed, $force_name = NULL) {
 		$this->info_file = array(
 			"name"			=> $_FILES["$file"]["name"],
-			"complete_name" => $name,
+			//"complete_name" => $name,
 			//original
+			"complete_name" => $name . "-" . time().".jpg",
 			//"complete_name" => $name . "-" . time() . "-" . $_FILES["$file"]["name"],
 			"temporal_name" => $_FILES["$file"]["tmp_name"],
 			"type"			=> $_FILES["$file"]["type"],
